@@ -33,11 +33,26 @@
     <script>
         const content = document.getElementById('content');
         content.focus();
-        content.addEventListener('input', () => {
+
+        function sizeText() {
             document.body.style.fontSize = '296px';
             while (content.scrollWidth > content.offsetWidth || content.scrollHeight > content.offsetHeight) {
                 document.body.style.fontSize = `${parseFloat(getComputedStyle(document.body).fontSize) - 1}px`;
             }
+        }
+
+        const textFromUrl = decodeURIComponent(window.location.hash.substring(1));
+        if (textFromUrl) {
+            content.textContent = textFromUrl;
+            sizeText();
+        }
+
+        window.addEventListener('blur', () => {
+            window.location.hash = encodeURIComponent(content.textContent);
+        });
+
+        content.addEventListener('input', () => {
+            sizeText();
         });
     </script>
     <script>
